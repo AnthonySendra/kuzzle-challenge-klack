@@ -18,7 +18,7 @@
 
       <ul class="channel-list">
         <channel
-          v-for="channel in state.channels"
+          v-for="channel in channels"
           track-by="$index"
           :name="channel"
           :current="state.current"
@@ -34,11 +34,21 @@
 
 <script>
   import Channel from './Channel';
+  import { loadChannels } from '../vuex/actions';
+  import { getChannels } from '../vuex/getters';
 
   export default {
     props: ['channelStore'],
     components: {
       Channel
+    },
+    vuex: {
+      actions: {
+        loadChannels
+      },
+      getters: {
+        channels: getChannels
+      }
     },
     data () {
       return {
@@ -48,7 +58,7 @@
       }
     },
     created () {
-      this.channelStore.getChannels();
+      this.loadChannels()
     },
     methods: {
       toggleAddChannel () {

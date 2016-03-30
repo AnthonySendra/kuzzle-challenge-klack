@@ -1,0 +1,6 @@
+export const LOAD_MESSAGES = 'LOAD_MESSAGES';
+export const ADD_MESSAGE = 'ADD_MESSAGE';
+export const DELETE_MESSAGE = 'DELETE_MESSAGE';
+
+export const ADD_CHANNEL = 'ADD_CHANNEL';
+export const LOAD_CHANNELS = 'LOAD_CHANNELS';
