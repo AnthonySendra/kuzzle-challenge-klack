@@ -6,7 +6,7 @@
     </div>
     <div class="channel-menu">
 
-      <channel-name :name="state.current"></channel-name>
+      <channel-name :name="currentChannel"></channel-name>
 
       <div id="header-search-form" class="search-form no-bottom-margin">
         <div class="highlighter-wrapper">
@@ -18,7 +18,8 @@
             placeholder="Search"
             maxlength="250"
             @keyup="triggerSearch()"
-            v-model="state.searchTerms"
+            @input="updateSearchTerms"
+            :value="searchTerms"
           />
 
           <div class="highlighter-underlay"></div>
@@ -32,24 +33,36 @@
   import ChannelName from './ChannelName';
   import kuzzle from '../services/kuzzle';
 
+  import { searchMessages, resetSearchMessages, updateSearchTerms } from '../vuex/actions';
+  import { getSearchTerms } from '../vuex/getters';
+
   export default {
-    props:['channelStore', 'authStore', 'messageStore'],
+    props:['currentChannel', 'authStore', 'messageStore'],
     components: {
       ChannelName
     },
+    vuex: {
+      actions: {
+        searchMessages,
+        resetSearchMessages,
+        updateSearchTerms
+      },
+      getters: {
+        searchTerms: getSearchTerms
+      }
+    },
     data () {
       return {
-        state: this.channelStore.state,
         isConnected: false
       }
     },
     methods: {
       triggerSearch () {
-        if (this.state.searchTerms.length > 0) {
-          this.messageStore.search(this.state.current, this.state.searchTerms);
+        if (this.searchTerms.length > 0) {
+          this.searchMessages(this.currentChannel, this.searchTerms);
         }
         else {
-          this.messageStore.resetSearch();
+          this.resetSearchMessages();
         }
       },
       logout () {

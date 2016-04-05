@@ -2,7 +2,7 @@
   <div class="messages">
     <messages
       :message-store="messageStore"
-      :messages="messageStore.state.messages"
+      :messages="messages"
       v-scroll-glue="messageStore.state.messages"
       :deletable="true"
       :current-user-id="userStore.state.id"
@@ -18,7 +18,7 @@
   <div class="search-right">
     <messages
       :message-store="messageStore"
-      :messages="messageStore.state.searchMessages"
+      :messages="searchMessages"
       :deletable="false"
     ></messages>
   </div>
@@ -32,12 +32,26 @@ import messageStore from './store/messages'
 import channelStore from './store/channels'
 import scrollGlue from './directive/scrollGlue'
 
+import { loadMessages, resetMessages, setCurrentChannel } from './vuex/actions';
+import { getMessages, getSearchedMessages } from './vuex/getters';
+
 export default {
   components: {
     Messages,
     InputBar
   },
   directives: [scrollGlue],
+  vuex: {
+    actions: {
+      loadMessages,
+      resetMessages,
+      setCurrentChannel
+    },
+    getters: {
+      messages: getMessages,
+      searchMessages: getSearchedMessages
+    }
+  },
   data () {
     return {
       messageStore: messageStore,
@@ -47,9 +61,9 @@ export default {
   },
   route: {
     data () {
-      this.channelStore.setCurrent(this.$route.params.channel);
-      this.messageStore.resetMessages();
-      this.messageStore.loadMessages(this.$route.params.channel);
+      this.setCurrentChannel(this.$route.params.channel);
+      this.resetMessages();
+      this.loadMessages(this.$route.params.channel);
       this.messageStore.subscribeMessages(this.$route.params.channel);
     }
   }

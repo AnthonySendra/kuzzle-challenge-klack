@@ -2,7 +2,7 @@
   <!-- Header -->
   <header-bar
     :auth-store="authStore"
-    :channel-store="channelStore"
+    :current-channel="currentChannel"
     :message-store="messageStore"
   ></header-bar>
 
@@ -50,11 +50,18 @@
   import authStore from './store/auth'
   import userStore from './store/user'
 
+  import { getCurrentChannel } from './vuex/getters';
+
   export default {
     components: {
       HeaderBar,
       Channels,
       Avatar
+    },
+    vuex: {
+      getters: {
+        currentChannel: getCurrentChannel
+      }
     },
     data () {
       return {

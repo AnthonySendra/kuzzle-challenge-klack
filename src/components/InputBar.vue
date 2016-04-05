@@ -13,8 +13,19 @@
 
 <script>
 
+  import { addMessage } from '../vuex/actions';
+  import { getCurrentChannel } from '../vuex/getters';
+
   export default {
     props: ['messageStore', 'currentUser', 'currentChannel'],
+    vuex: {
+      actions: {
+        addMessage
+      },
+      getters: {
+        currentChannel: getCurrentChannel
+      }
+    },
     data () {
       return {
         newMessage: null
@@ -23,7 +34,7 @@
     methods: {
       addMessage () {
         if (this.newMessage.length > 0) {
-          this.messageStore.sendMessage(this.newMessage, this.currentUser, this.currentChannel);
+          this.addMessage(this.newMessage, this.currentUser, this.currentChannel);
           this.newMessage = '';
         }
       }
